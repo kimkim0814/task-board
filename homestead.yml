@@ -1,0 +1,4 @@
+# sites:
+#     - map: homestead.test
+#       to: /Users/t/Documents/projects/task-board
+#       php: "7.3"

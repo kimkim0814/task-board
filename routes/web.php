@@ -14,13 +14,30 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::user()) {
+    return redirect()->route('home');
+    }
+
+    return redirect('/login');
+
 });
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', function () {
+    return redirect()->route('tasks.index');
+})->name('home');
 
-Auth::routes();
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('tasks', 'TaskController@index')->name('tasks.index');
+    Route::post('tasks', 'TaskController@store')->name('tasks.store');
+    Route::put('tasks/sync', 'TaskController@sync')->name('tasks.sync');
+    Route::delete('tasks/{tasks}', 'TaskController@destroy')->name('tasks.destroy');
+});
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('statuses', 'StatusController@store')->name('statuses.store');
+    Route::put('statuses/sync', 'StatusController@sync')->name('statuses.sync');
+    Route::delete('statuses/{status}', 'StatusController@destroy')->name('statuses.destroy');
+});
+
 
