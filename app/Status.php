@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
-    protected $fillable = [‘title’, ‘slug’, ‘order’];
+    protected $fillable = ['title', 'slug', 'order'];
 
     public $timestamps = false;
 
@@ -20,3 +20,4 @@ class Status extends Model
         return $this->belongsTo(User::class);
     }
 }
+
