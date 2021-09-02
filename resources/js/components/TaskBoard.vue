@@ -28,8 +28,23 @@
             </p>
           </div>
 
-      <!-- あとで、ここにタスク追加フォームを入れます-->
 
+<AddTaskForm
+    v-if="newTaskForStatus === status.id"
+    :status-id="status.id"
+    v-on:task-added="handleTaskAdded"
+    v-on:task-canceled="closeAddTaskForm"
+  />
+  <draggable
+                                    class="flex-1 overflow-hidden"
+                                    v-model="status.tasks"
+                                    v-bind="taskDragOptions"
+                                    @end="handleTaskMoved"
+                                >
+                                    <transition-group
+                                        class="flex-1 flex flex-col h-full overflow-x-hidden overflow-y-auto rounded shadow-xs"
+                                        tag="div"
+                                    >
           <div
             v-show="!status.tasks.length"
             class="flex-1 p-4 flex flex-col items-center justify-center"
@@ -41,6 +56,8 @@
               追加
             </button>
           </div>
+</transition-group>
+  </draggable>
         </div>
       </div>
     </div>
@@ -48,17 +65,49 @@
 </template>
 
 <script>
+import AddTaskForm from "./AddTaskForm"; //コンポーネントをインポートする
+import draggable from "vuedraggable";
+
 export default {
+  components: { AddTaskForm ,
+                draggable}, // 登録
+
   props: {
     initialData: Array
   },
   data() {
     return {
-      statuses: []
+      statuses: [],
+
+      newTaskForStatus: 0 // 追加するステータスのID
     };
   },
   mounted() {
+    // ステータスを「クローン」して、変更時にプロップを変更しないように
     this.statuses = JSON.parse(JSON.stringify(this.initialData));
+  },
+  methods: {
+    // statusIdを設定し、フォームを表示
+    openAddTaskForm(statusId) {
+      this.newTaskForStatus = statusId;
+    },
+    // statusIdをリセットしてフォームを閉じる
+    closeAddTaskForm() {
+      this.newTaskForStatus = 0;
+    },
+    // ボードの正しい列にカードを追加
+    handleTaskAdded(newTask) {
+      // Find the index of the status where we should add the task
+      const statusIndex = this.statuses.findIndex(
+        status => status.id === newTask.status_id
+      );
+
+      // 新しく作成しカードをボードに追加
+      this.statuses[statusIndex].tasks.push(newTask);
+
+      // AddTaskFormを閉じる
+      this.closeAddTaskForm();
+    },
   }
 };
 </script>
