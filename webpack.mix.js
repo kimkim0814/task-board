@@ -14,6 +14,7 @@ require('laravel-mix-tailwind');
  */
 
 mix.js('resources/js/app.js', 'public/js')
+   .vue()
    .postCss('resources/css/app.css', 'public/css')
    .tailwind('./tailwind.config.js');
 
