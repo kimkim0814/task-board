@@ -39,5 +39,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('statuses/sync', 'StatusController@sync')->name('statuses.sync');
     Route::delete('statuses/{status}', 'StatusController@destroy')->name('statuses.destroy');
 });
+Route::put('tasks/sync', 'TaskController@sync')->name('tasks.sync');
 
 
