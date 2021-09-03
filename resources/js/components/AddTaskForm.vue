@@ -33,6 +33,7 @@
       <button
         type="submit"
         class="px-3 py-1 leading-5 text-white bg-orange-600 hover:bg-orange-500 rounded"
+        style="color:black"
       >
         追加
       </button>
